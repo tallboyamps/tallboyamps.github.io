@@ -107,10 +107,31 @@ body {
 }
 
 /* =========================
-   HEADER
+   HEADER & CTA
 ========================= */
 .header-line {
-  margin-bottom: 0.6em;
+  margin-bottom: 0.4em;
+}
+
+.cta-line {
+  margin-bottom: 0.8em;
+  opacity: 0; /* start hidden, fade in after header */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3em; /* space between icon and text */
+}
+
+.cta-icon {
+  width: 24px;
+  height: 24px;
+  fill: #ff8c61;
+  filter: drop-shadow(0 0 6px rgba(255,140,80,0.6));
+  transition: filter 0.3s ease;
+}
+
+.cta-icon:hover {
+  filter: drop-shadow(0 0 15px rgba(255,180,120,1));
 }
 
 /* =========================
@@ -131,7 +152,6 @@ body {
 ========================= */
 .letter {
   display: inline-block;
-  font-size: clamp(2rem, 6vw, 4rem);
   background: linear-gradient(90deg, #ffd1a1, #ff8c61, #ff4f81, #ffd1a1);
   background-size: 300% 300%;
   -webkit-background-clip: text;
@@ -150,9 +170,24 @@ body {
     calc(var(--i) * 0.05s + 1.2s);
 }
 
-/* Header letters slightly larger */
+/* Header */
 .header-letter {
   font-size: clamp(3rem, 8vw, 5.2rem);
+  animation:
+    headerFlicker 1.6s ease-out both,
+    letterGlow 3.5s ease-in-out infinite alternate;
+}
+
+/* CTA letters with sequential wave */
+.cta-letter {
+  font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+  opacity: 0;
+  animation: ctaWave 0.8s forwards, letterGlow 4.5s ease-in-out infinite alternate;
+}
+
+/* Email letters size */
+.email-line .letter {
+  font-size: clamp(2rem, 6vw, 4rem);
 }
 
 /* =========================
@@ -204,6 +239,22 @@ body {
   }
 }
 
+@keyframes headerFlicker {
+  0%   { opacity: 0; filter: brightness(0.4); }
+  20%  { opacity: 0.4; }
+  30%  { opacity: 0.1; }
+  45%  { opacity: 0.7; }
+  60%  { opacity: 0.3; }
+  75%  { opacity: 1; filter: brightness(1); }
+  100% { opacity: 1; }
+}
+
+/* CTA sequential wave fade-in */
+@keyframes ctaWave {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 @keyframes drift1 {
   from { transform: translate(0,0); }
   to   { transform: translate(10%,8%); }
@@ -237,9 +288,11 @@ body {
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('container');
+
+  const headerText = "Tall Boy";
+  const ctaText = "Reach out";
   const email = "loud@tallboyamps.co.uk";
   const split = ["loud", "@", "tallboyamps.co.uk"];
-  const headerText = "Tall Boy";
 
   function renderHeader() {
     const headerDiv = document.createElement('div');
@@ -253,7 +306,37 @@ document.addEventListener('DOMContentLoaded', () => {
       headerDiv.appendChild(span);
     });
 
+    const ctaDiv = document.createElement('div');
+    ctaDiv.className = 'cta-line';
+
+    // Add envelope icon
+    ctaDiv.innerHTML = `<svg class="cta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+      <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18a2 2 0 002 2h16a2 2 0 002-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+    </svg>`;
+
+    // Add letters with sequential animation
+    [...ctaText].forEach((char, i) => {
+      const span = document.createElement('span');
+      if (char === " ") {
+        span.textContent = "\u00A0";
+        span.style.width = "0.5ch";
+        span.style.display = "inline-block";
+      } else {
+        span.className = 'letter cta-letter';
+        span.textContent = char;
+        span.style.animationDelay = `${i * 0.08}s`; // sequential wave
+      }
+      ctaDiv.appendChild(span);
+    });
+
     container.appendChild(headerDiv);
+    container.appendChild(ctaDiv);
+
+    // Fade in CTA container after header flicker
+    setTimeout(() => {
+      ctaDiv.style.transition = "opacity 0.8s ease-out";
+      ctaDiv.style.opacity = 1;
+    }, 1600);
   }
 
   function renderEmail() {
@@ -284,11 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   renderEmail();
-
-  requestAnimationFrame(() => {
-    container.classList.add('ready');
-  });
-
+  requestAnimationFrame(() => container.classList.add('ready'));
   window.addEventListener('resize', renderEmail);
 });
 </script>
