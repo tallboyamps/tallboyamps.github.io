@@ -4,16 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-
   <title>Tallboy Amps</title>
   <link rel="icon" href="valve.png" type="image/png">
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700&display=swap');
 
-    /* =========================
-   ROOT SAFETY (NO SCROLL)
-========================= */
     html,
     body {
       margin: 0;
@@ -30,9 +26,7 @@
       inset: 0;
     }
 
-    /* =========================
-   BACKGROUND
-========================= */
+    /* Background */
     .background-valve {
       position: fixed;
       inset: -10%;
@@ -44,9 +38,7 @@
       pointer-events: none;
     }
 
-    /* =========================
-   BLOBS
-========================= */
+    /* Blobs */
     .blob {
       position: fixed;
       width: 70vmax;
@@ -73,24 +65,19 @@
       animation: drift2 75s infinite alternate ease-in-out;
     }
 
-    /* =========================
-   CONTAINER
-========================= */
+    /* Container */
     .container {
       position: fixed;
       inset: 0;
       z-index: 2;
-
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
-
       padding: 1rem;
       max-width: 100vw;
       overflow: clip;
-
       opacity: 0;
       pointer-events: none;
     }
@@ -98,14 +85,11 @@
     .container.ready {
       opacity: 1;
       pointer-events: auto;
-      animation:
-        growIn 1.6s cubic-bezier(.22, .61, .36, 1) both,
+      animation: growIn 1.6s cubic-bezier(.22, .61, .36, 1) both,
         containerBreath 8s infinite alternate ease-in-out;
     }
 
-    /* =========================
-   HEADER & CTA
-========================= */
+    /* Header & CTA */
     .header-line {
       margin-bottom: 0.4em;
     }
@@ -113,12 +97,10 @@
     .cta-line {
       margin-bottom: 0.8em;
       opacity: 0;
-      /* start hidden, fade in after header */
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 0.3em;
-      /* space between icon and text */
     }
 
     .cta-icon {
@@ -133,9 +115,7 @@
       filter: drop-shadow(0 0 15px rgba(255, 180, 120, 1));
     }
 
-    /* =========================
-   EMAIL
-========================= */
+    /* Email */
     .email-line {
       margin: 0.2em 0;
     }
@@ -144,212 +124,131 @@
       text-decoration: none;
       display: inline-block;
       white-space: nowrap;
-      /* prevent wrapping by default */
     }
 
     /* =========================
-   LETTERS
-========================= */
+       Letters
+    ========================= */
     .letter {
       display: inline-block;
       background: linear-gradient(90deg, #ffd1a1, #ff8c61, #ff4f81, #ffd1a1);
       background-size: 300% 300%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-
-      text-shadow:
-        0 0 4px rgba(255, 140, 80, 0.15),
+      text-shadow: 0 0 4px rgba(255, 140, 80, 0.15),
         0 0 10px rgba(255, 60, 120, 0.05);
 
-      animation:
-        filamentIgnite 0.35s ease-out both,
+      animation: filamentIgnite 0.35s ease-out both,
         letterGlow 3.2s ease-in-out infinite alternate;
-
-      animation-delay:
-        calc(var(--i) * 0.05s + 0.8s),
+      animation-delay: calc(var(--i) * 0.05s + 0.8s),
         calc(var(--i) * 0.05s + 1.2s);
     }
 
-    /* Header */
     .header-letter {
       font-size: clamp(3rem, 8vw, 5.2rem);
-      animation:
-        headerFlicker 1.6s ease-out both,
+      animation: headerFlicker 1.6s ease-out both,
         letterGlow 3.5s ease-in-out infinite alternate;
     }
 
-    /* CTA letters with sequential wave */
     .cta-letter {
       font-size: clamp(1.2rem, 3.5vw, 1.6rem);
       opacity: 0;
-      animation: ctaWave 0.8s forwards, letterGlow 4.5s ease-in-out infinite alternate;
+      animation: ctaWave 0.8s forwards,
+        letterGlow 4.5s ease-in-out infinite alternate;
     }
 
-    /* Email letters size */
     .email-line .letter {
       font-size: clamp(2rem, 6vw, 4rem);
     }
 
     /* =========================
-   ANIMATIONS
-========================= */
+       Animations
+    ========================= */
     @keyframes growIn {
-      from {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     @keyframes containerBreath {
-      from {
-        transform: scale(1);
-      }
-
-      to {
-        transform: scale(1.025);
-      }
+      from { transform: scale(1); }
+      to { transform: scale(1.025); }
     }
 
     @keyframes valvePulse {
-      from {
-        opacity: 0.75;
-        transform: scale(1);
-      }
-
-      to {
-        opacity: 0.9;
-        transform: scale(1.02);
-      }
+      from { opacity: 0.75; transform: scale(1); }
+      to { opacity: 0.9; transform: scale(1.02); }
     }
 
     @keyframes filamentIgnite {
-      0% {
-        text-shadow:
-          0 0 2px rgba(255, 140, 80, 0.1),
-          0 0 6px rgba(255, 60, 120, 0.05);
-      }
-
-      40% {
-        text-shadow:
-          0 0 25px rgba(255, 180, 120, 0.9),
-          0 0 60px rgba(255, 100, 120, 0.6);
-      }
-
-      100% {
-        text-shadow:
-          0 0 15px rgba(255, 180, 120, 0.6),
-          0 0 40px rgba(255, 100, 120, 0.35);
-      }
+      0% { text-shadow: 0 0 2px rgba(255,140,80,0.1), 0 0 6px rgba(255,60,120,0.05); }
+      40% { text-shadow: 0 0 25px rgba(255,180,120,0.9), 0 0 60px rgba(255,100,120,0.6); }
+      100% { text-shadow: 0 0 15px rgba(255,180,120,0.6), 0 0 40px rgba(255,100,120,0.35); }
     }
 
     @keyframes letterGlow {
-      from {
-        text-shadow:
-          0 0 15px rgba(255, 180, 120, 0.6),
-          0 0 40px rgba(255, 100, 120, 0.35);
-      }
-
-      to {
-        text-shadow:
-          0 0 40px rgba(255, 180, 120, 1),
-          0 0 90px rgba(255, 100, 120, 0.7);
-      }
+      from { text-shadow: 0 0 15px rgba(255,180,120,0.6), 0 0 40px rgba(255,100,120,0.35); }
+      to { text-shadow: 0 0 40px rgba(255,180,120,1), 0 0 90px rgba(255,100,120,0.7); }
     }
 
     @keyframes headerFlicker {
-      0% {
-        opacity: 0;
-        filter: brightness(0.4);
-      }
-
-      20% {
-        opacity: 0.4;
-      }
-
-      30% {
-        opacity: 0.1;
-      }
-
-      45% {
-        opacity: 0.7;
-      }
-
-      60% {
-        opacity: 0.3;
-      }
-
-      75% {
-        opacity: 1;
-        filter: brightness(1);
-      }
-
-      100% {
-        opacity: 1;
-      }
+      0% { opacity: 0; filter: brightness(0.4); }
+      20% { opacity: 0.4; }
+      30% { opacity: 0.1; }
+      45% { opacity: 0.7; }
+      60% { opacity: 0.3; }
+      75% { opacity: 1; filter: brightness(1); }
+      100% { opacity: 1; }
     }
 
-    /* CTA sequential wave fade-in */
     @keyframes ctaWave {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity:0; transform: translateY(10px); }
+      to { opacity:1; transform: translateY(0); }
     }
 
     @keyframes drift1 {
-      from {
-        transform: translate(0, 0);
-      }
-
-      to {
-        transform: translate(10%, 8%);
-      }
+      from { transform: translate(0,0); }
+      to { transform: translate(10%,8%); }
     }
 
     @keyframes drift2 {
-      from {
-        transform: translate(0, 0);
-      }
-
-      to {
-        transform: translate(-10%, -8%);
-      }
+      from { transform: translate(0,0); }
+      to { transform: translate(-10%,-8%); }
     }
 
     /* =========================
-   ACCESSIBILITY
-========================= */
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        animation: none !important;
-        transition: none !important;
+       iOS fallback for header flicker
+    ========================= */
+    @supports (-webkit-overflow-scrolling: touch) {
+      .header-letter {
+        animation: headerFlickerIOS 1.6s ease-out both,
+                   letterGlow 3.5s ease-in-out infinite alternate;
       }
+
+      @keyframes headerFlickerIOS {
+        0%   { opacity:0.3; text-shadow:0 0 2px rgba(255,140,80,0.1),0 0 6px rgba(255,60,120,0.05); }
+        20%  { opacity:0.6; text-shadow:0 0 10px rgba(255,180,120,0.7),0 0 25px rgba(255,100,120,0.5); }
+        40%  { opacity:0.2; text-shadow:0 0 2px rgba(255,140,80,0.1),0 0 8px rgba(255,60,120,0.05); }
+        60%  { opacity:0.5; text-shadow:0 0 12px rgba(255,180,120,0.8),0 0 30px rgba(255,100,120,0.6); }
+        80%  { opacity:0.8; text-shadow:0 0 20px rgba(255,180,120,1),0 0 45px rgba(255,100,120,0.7); }
+        100% { opacity:1; text-shadow:0 0 15px rgba(255,180,120,0.8),0 0 40px rgba(255,100,120,0.6); }
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
 
 <body>
-
   <div class="background-valve"></div>
   <div class="blob"></div>
   <div class="blob"></div>
-
   <div class="container" id="container"></div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const container = document.getElementById('container');
-
       const headerText = "Tall Boy";
       const ctaText = "Reach out via email";
       const email = "loud@tallboyamps.co.uk";
@@ -358,7 +257,6 @@
       function renderHeader() {
         const headerDiv = document.createElement('div');
         headerDiv.className = 'header-line';
-
         [...headerText].forEach((char, i) => {
           const span = document.createElement('span');
           span.className = 'letter header-letter';
@@ -369,13 +267,10 @@
 
         const ctaDiv = document.createElement('div');
         ctaDiv.className = 'cta-line';
-
-        // Add envelope icon
         ctaDiv.innerHTML = `<svg class="cta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-      <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18a2 2 0 002 2h16a2 2 0 002-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-    </svg>`;
+          <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18a2 2 0 002 2h16a2 2 0 002-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+        </svg>`;
 
-        // Add letters with sequential animation
         [...ctaText].forEach((char, i) => {
           const span = document.createElement('span');
           if (char === " ") {
@@ -385,7 +280,7 @@
           } else {
             span.className = 'letter cta-letter';
             span.textContent = char;
-            span.style.animationDelay = `${i * 0.08}s`; // sequential wave
+            span.style.animationDelay = `${i * 0.08}s`;
           }
           ctaDiv.appendChild(span);
         });
@@ -393,7 +288,6 @@
         container.appendChild(headerDiv);
         container.appendChild(ctaDiv);
 
-        // Fade in CTA container after header flicker
         setTimeout(() => {
           ctaDiv.style.transition = "opacity 0.8s ease-out";
           ctaDiv.style.opacity = 1;
@@ -404,10 +298,8 @@
         container.innerHTML = '';
         renderHeader();
 
-        // First render email in single line
         const lineDiv = document.createElement('div');
         lineDiv.className = 'email-line';
-
         const link = document.createElement('a');
         link.className = 'email-link';
         link.href = `mailto:${email}`;
@@ -424,7 +316,6 @@
         lineDiv.appendChild(link);
         container.appendChild(lineDiv);
 
-        // If it overflows, replace with split parts
         if (link.scrollWidth > container.clientWidth) {
           const splitDiv = document.createElement('div');
           splitDiv.className = 'email-line';
@@ -441,7 +332,6 @@
             });
             splitDiv.appendChild(partLink);
           });
-
           container.removeChild(lineDiv);
           container.appendChild(splitDiv);
         }
@@ -452,7 +342,6 @@
       window.addEventListener('resize', renderEmail);
     });
   </script>
-
 </body>
 
 </html>
