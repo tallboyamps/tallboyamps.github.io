@@ -10,16 +10,19 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700&display=swap');
 
+/* =========================
+   BASE
+========================= */
 html, body {
   margin: 0;
   height: 100%;
   overflow: hidden;
-  font-family: 'Saira Condensed', sans-serif;
   background: #000;
+  font-family: 'Saira Condensed', sans-serif;
 }
 
 /* =========================
-   BACKGROUND VALVE
+   BACKGROUND
 ========================= */
 .background-valve {
   position: absolute;
@@ -36,32 +39,39 @@ html, body {
 }
 
 /* =========================
-   CENTER CONTAINER
+   CONTAINER (HIDDEN INITIALLY)
 ========================= */
 .container {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scale(0.9);
   z-index: 2;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
 
   width: 90vw;
   max-width: 600px;
   padding: 1rem;
 
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Activated once DOM + render is ready */
+.container.ready {
+  opacity: 1;
+  pointer-events: auto;
   animation:
     growIn 1.6s cubic-bezier(.22,.61,.36,1) both,
     containerBreath 8s infinite alternate ease-in-out;
 }
 
 /* =========================
-   EMAIL LINES
+   EMAIL
 ========================= */
 .email-line {
   margin: 0.2em 0;
@@ -77,29 +87,26 @@ html, body {
 .letter {
   display: inline-block;
   font-size: clamp(2rem, 6vw, 4rem);
-  cursor: pointer;
-
   background: linear-gradient(90deg, #ffd1a1, #ff8c61, #ff4f81, #ffd1a1);
   background-size: 300% 300%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 
-  /* start dim */
   text-shadow:
     0 0 4px rgba(255,140,80,0.15),
     0 0 10px rgba(255,60,120,0.05);
 
   animation:
-    filamentIgnite 0.35s ease-out 1.2s both,
-    letterGlow 3.2s ease-in-out 1.6s infinite alternate;
+    filamentIgnite 0.35s ease-out both,
+    letterGlow 3.2s ease-in-out infinite alternate;
 
   animation-delay:
-    calc(var(--i) * 0.05s),
-    calc(var(--i) * 0.05s);
+    calc(var(--i) * 0.05s + 0.8s),
+    calc(var(--i) * 0.05s + 1.2s);
 }
 
 /* =========================
-   AMBIENT BLOBS
+   BLOBS
 ========================= */
 .blob {
   position: absolute;
@@ -113,7 +120,6 @@ html, body {
   );
   filter: blur(140px);
   opacity: 0.25;
-  pointer-events: none;
   z-index: 1;
 }
 
@@ -132,12 +138,10 @@ html, body {
 /* =========================
    ANIMATIONS
 ========================= */
-
-/* slow warm-up grow */
 @keyframes growIn {
   from {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.88);
+    transform: translate(-50%, -50%) scale(0.9);
   }
   to {
     opacity: 1;
@@ -145,25 +149,16 @@ html, body {
   }
 }
 
-/* subtle breathing */
 @keyframes containerBreath {
   from { transform: translate(-50%, -50%) scale(1); }
   to   { transform: translate(-50%, -50%) scale(1.025); }
 }
 
-/* background pulse */
 @keyframes valvePulse {
-  from {
-    opacity: 0.75;
-    transform: translate(-50%, -50%) scale(1);
-  }
-  to {
-    opacity: 0.9;
-    transform: translate(-50%, -50%) scale(1.02);
-  }
+  from { opacity: 0.75; transform: translate(-50%, -50%) scale(1); }
+  to   { opacity: 0.9;  transform: translate(-50%, -50%) scale(1.02); }
 }
 
-/* one-time filament ignition */
 @keyframes filamentIgnite {
   0% {
     text-shadow:
@@ -182,7 +177,6 @@ html, body {
   }
 }
 
-/* ongoing warm glow */
 @keyframes letterGlow {
   from {
     text-shadow:
@@ -196,7 +190,6 @@ html, body {
   }
 }
 
-/* blob drift */
 @keyframes drift1 {
   from { transform: translate(0,0); }
   to   { transform: translate(10%,8%); }
@@ -207,7 +200,9 @@ html, body {
   to   { transform: translate(-10%,-8%); }
 }
 
-/* accessibility */
+/* =========================
+   ACCESSIBILITY
+========================= */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation: none !important;
@@ -226,37 +221,45 @@ html, body {
 <div class="container" id="container"></div>
 
 <script>
-const container = document.getElementById('container');
-const email = "loud@tallboyamps.co.uk";
-const split = ["loud", "@", "tallboyamps.co.uk"];
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('container');
+  const email = "loud@tallboyamps.co.uk";
+  const split = ["loud", "@", "tallboyamps.co.uk"];
 
-function renderEmail() {
-  container.innerHTML = '';
-  const lines = window.innerWidth <= 600 ? split : [email];
+  function renderEmail() {
+    container.innerHTML = '';
+    const lines = window.innerWidth <= 600 ? split : [email];
 
-  lines.forEach(line => {
-    const lineDiv = document.createElement('div');
-    lineDiv.className = 'email-line';
+    lines.forEach(line => {
+      const lineDiv = document.createElement('div');
+      lineDiv.className = 'email-line';
 
-    const link = document.createElement('a');
-    link.className = 'email-link';
-    link.href = `mailto:${email}`;
+      const link = document.createElement('a');
+      link.className = 'email-link';
+      link.href = `mailto:${email}`;
 
-    line.split('').forEach((char, i) => {
-      const span = document.createElement('span');
-      span.className = 'letter';
-      span.textContent = char;
-      span.style.setProperty('--i', i);
-      link.appendChild(span);
+      [...line].forEach((char, i) => {
+        const span = document.createElement('span');
+        span.className = 'letter';
+        span.textContent = char;
+        span.style.setProperty('--i', i);
+        link.appendChild(span);
+      });
+
+      lineDiv.appendChild(link);
+      container.appendChild(lineDiv);
     });
+  }
 
-    lineDiv.appendChild(link);
-    container.appendChild(lineDiv);
+  renderEmail();
+
+  // allow layout to settle before revealing
+  requestAnimationFrame(() => {
+    container.classList.add('ready');
   });
-}
 
-window.addEventListener('resize', renderEmail);
-renderEmail();
+  window.addEventListener('resize', renderEmail);
+});
 </script>
 
 </body>
