@@ -1,396 +1,458 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-<title>Tallboy Amps</title>
-<link rel="icon" href="valve.png" type="image/png">
+  <title>Tallboy Amps</title>
+  <link rel="icon" href="valve.png" type="image/png">
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700&display=swap');
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@700&display=swap');
 
-/* =========================
+    /* =========================
    ROOT SAFETY (NO SCROLL)
 ========================= */
-html, body {
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  overscroll-behavior: none;
-  background: #000;
-  font-family: 'Saira Condensed', sans-serif;
-}
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      overscroll-behavior: none;
+      background: #000;
+      font-family: 'Saira Condensed', sans-serif;
+    }
 
-body {
-  position: fixed;
-  inset: 0;
-}
+    body {
+      position: fixed;
+      inset: 0;
+    }
 
-/* =========================
+    /* =========================
    BACKGROUND
 ========================= */
-.background-valve {
-  position: fixed;
-  inset: -10%;
-  background: url('valve.png') center / cover no-repeat;
-  filter: blur(40px) brightness(0.35);
-  opacity: 0.8;
-  z-index: 0;
-  animation: valvePulse 3s infinite alternate ease-in-out;
-  pointer-events: none;
-}
+    .background-valve {
+      position: fixed;
+      inset: -10%;
+      background: url('valve.png') center / cover no-repeat;
+      filter: blur(40px) brightness(0.35);
+      opacity: 0.8;
+      z-index: 0;
+      animation: valvePulse 3s infinite alternate ease-in-out;
+      pointer-events: none;
+    }
 
-/* =========================
+    /* =========================
    BLOBS
 ========================= */
-.blob {
-  position: fixed;
-  width: 70vmax;
-  height: 70vmax;
-  background: radial-gradient(
-    circle,
-    rgba(255,120,80,0.25),
-    rgba(255,60,120,0.15),
-    transparent 70%
-  );
-  filter: blur(140px);
-  opacity: 0.25;
-  z-index: 1;
-  pointer-events: none;
-}
+    .blob {
+      position: fixed;
+      width: 70vmax;
+      height: 70vmax;
+      background: radial-gradient(circle,
+          rgba(255, 120, 80, 0.25),
+          rgba(255, 60, 120, 0.15),
+          transparent 70%);
+      filter: blur(140px);
+      opacity: 0.25;
+      z-index: 1;
+      pointer-events: none;
+    }
 
-.blob:nth-child(2) {
-  top: -35%;
-  left: -35%;
-  animation: drift1 60s infinite alternate ease-in-out;
-}
+    .blob:nth-child(2) {
+      top: -35%;
+      left: -35%;
+      animation: drift1 60s infinite alternate ease-in-out;
+    }
 
-.blob:nth-child(3) {
-  bottom: -35%;
-  right: -35%;
-  animation: drift2 75s infinite alternate ease-in-out;
-}
+    .blob:nth-child(3) {
+      bottom: -35%;
+      right: -35%;
+      animation: drift2 75s infinite alternate ease-in-out;
+    }
 
-/* =========================
+    /* =========================
    CONTAINER
 ========================= */
-.container {
-  position: fixed;
-  inset: 0;
-  z-index: 2;
+    .container {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
 
-  padding: 1rem;
-  max-width: 100vw;
-  overflow: clip;
+      padding: 1rem;
+      max-width: 100vw;
+      overflow: clip;
 
-  opacity: 0;
-  pointer-events: none;
-}
+      opacity: 0;
+      pointer-events: none;
+    }
 
-.container.ready {
-  opacity: 1;
-  pointer-events: auto;
-  animation:
-    growIn 1.6s cubic-bezier(.22,.61,.36,1) both,
-    containerBreath 8s infinite alternate ease-in-out;
-}
+    .container.ready {
+      opacity: 1;
+      pointer-events: auto;
+      animation:
+        growIn 1.6s cubic-bezier(.22, .61, .36, 1) both,
+        containerBreath 8s infinite alternate ease-in-out;
+    }
 
-/* =========================
+    /* =========================
    HEADER & CTA
 ========================= */
-.header-line {
-  margin-bottom: 0.4em;
-}
+    .header-line {
+      margin-bottom: 0.4em;
+    }
 
-.cta-line {
-  margin-bottom: 0.8em;
-  opacity: 0; /* start hidden, fade in after header */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.3em; /* space between icon and text */
-}
+    .cta-line {
+      margin-bottom: 0.8em;
+      opacity: 0;
+      /* start hidden, fade in after header */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.3em;
+      /* space between icon and text */
+    }
 
-.cta-icon {
-  width: 24px;
-  height: 24px;
-  fill: #ff8c61;
-  filter: drop-shadow(0 0 6px rgba(255,140,80,0.6));
-  transition: filter 0.3s ease;
-}
+    .cta-icon {
+      width: 24px;
+      height: 24px;
+      fill: #ff8c61;
+      filter: drop-shadow(0 0 6px rgba(255, 140, 80, 0.6));
+      transition: filter 0.3s ease;
+    }
 
-.cta-icon:hover {
-  filter: drop-shadow(0 0 15px rgba(255,180,120,1));
-}
+    .cta-icon:hover {
+      filter: drop-shadow(0 0 15px rgba(255, 180, 120, 1));
+    }
 
-/* =========================
+    /* =========================
    EMAIL
 ========================= */
-.email-line {
-  margin: 0.2em 0;
-}
+    .email-line {
+      margin: 0.2em 0;
+    }
 
-.email-link {
-  text-decoration: none;
-  display: inline-block;
-  white-space: nowrap; /* prevent wrapping by default */
-}
+    .email-link {
+      text-decoration: none;
+      display: inline-block;
+      white-space: nowrap;
+      /* prevent wrapping by default */
+    }
 
-/* =========================
+    /* =========================
    LETTERS
 ========================= */
-.letter {
-  display: inline-block;
-  background: linear-gradient(90deg, #ffd1a1, #ff8c61, #ff4f81, #ffd1a1);
-  background-size: 300% 300%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+    .letter {
+      display: inline-block;
+      background: linear-gradient(90deg, #ffd1a1, #ff8c61, #ff4f81, #ffd1a1);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
 
-  text-shadow:
-    0 0 4px rgba(255,140,80,0.15),
-    0 0 10px rgba(255,60,120,0.05);
+      text-shadow:
+        0 0 4px rgba(255, 140, 80, 0.15),
+        0 0 10px rgba(255, 60, 120, 0.05);
 
-  animation:
-    filamentIgnite 0.35s ease-out both,
-    letterGlow 3.2s ease-in-out infinite alternate;
+      animation:
+        filamentIgnite 0.35s ease-out both,
+        letterGlow 3.2s ease-in-out infinite alternate;
 
-  animation-delay:
-    calc(var(--i) * 0.05s + 0.8s),
-    calc(var(--i) * 0.05s + 1.2s);
-}
+      animation-delay:
+        calc(var(--i) * 0.05s + 0.8s),
+        calc(var(--i) * 0.05s + 1.2s);
+    }
 
-/* Header */
-.header-letter {
-  font-size: clamp(3rem, 8vw, 5.2rem);
-  animation:
-    headerFlicker 1.6s ease-out both,
-    letterGlow 3.5s ease-in-out infinite alternate;
-}
+    /* Header */
+    .header-letter {
+      font-size: clamp(3rem, 8vw, 5.2rem);
+      animation:
+        headerFlicker 1.6s ease-out both,
+        letterGlow 3.5s ease-in-out infinite alternate;
+    }
 
-/* CTA letters with sequential wave */
-.cta-letter {
-  font-size: clamp(1.2rem, 3.5vw, 1.6rem);
-  opacity: 0;
-  animation: ctaWave 0.8s forwards, letterGlow 4.5s ease-in-out infinite alternate;
-}
+    /* CTA letters with sequential wave */
+    .cta-letter {
+      font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+      opacity: 0;
+      animation: ctaWave 0.8s forwards, letterGlow 4.5s ease-in-out infinite alternate;
+    }
 
-/* Email letters size */
-.email-line .letter {
-  font-size: clamp(2rem, 6vw, 4rem);
-}
+    /* Email letters size */
+    .email-line .letter {
+      font-size: clamp(2rem, 6vw, 4rem);
+    }
 
-/* =========================
+    /* =========================
    ANIMATIONS
 ========================= */
-@keyframes growIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to   { opacity: 1; transform: scale(1); }
-}
+    @keyframes growIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
 
-@keyframes containerBreath {
-  from { transform: scale(1); }
-  to   { transform: scale(1.025); }
-}
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
 
-@keyframes valvePulse {
-  from { opacity: 0.75; transform: scale(1); }
-  to   { opacity: 0.9; transform: scale(1.02); }
-}
+    @keyframes containerBreath {
+      from {
+        transform: scale(1);
+      }
 
-@keyframes filamentIgnite {
-  0% {
-    text-shadow:
-      0 0 2px rgba(255,140,80,0.1),
-      0 0 6px rgba(255,60,120,0.05);
-  }
-  40% {
-    text-shadow:
-      0 0 25px rgba(255,180,120,0.9),
-      0 0 60px rgba(255,100,120,0.6);
-  }
-  100% {
-    text-shadow:
-      0 0 15px rgba(255,180,120,0.6),
-      0 0 40px rgba(255,100,120,0.35);
-  }
-}
+      to {
+        transform: scale(1.025);
+      }
+    }
 
-@keyframes letterGlow {
-  from {
-    text-shadow:
-      0 0 15px rgba(255,180,120,0.6),
-      0 0 40px rgba(255,100,120,0.35);
-  }
-  to {
-    text-shadow:
-      0 0 40px rgba(255,180,120,1),
-      0 0 90px rgba(255,100,120,0.7);
-  }
-}
+    @keyframes valvePulse {
+      from {
+        opacity: 0.75;
+        transform: scale(1);
+      }
 
-@keyframes headerFlicker {
-  0%   { opacity: 0; filter: brightness(0.4); }
-  20%  { opacity: 0.4; }
-  30%  { opacity: 0.1; }
-  45%  { opacity: 0.7; }
-  60%  { opacity: 0.3; }
-  75%  { opacity: 1; filter: brightness(1); }
-  100% { opacity: 1; }
-}
+      to {
+        opacity: 0.9;
+        transform: scale(1.02);
+      }
+    }
 
-/* CTA sequential wave fade-in */
-@keyframes ctaWave {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+    @keyframes filamentIgnite {
+      0% {
+        text-shadow:
+          0 0 2px rgba(255, 140, 80, 0.1),
+          0 0 6px rgba(255, 60, 120, 0.05);
+      }
 
-@keyframes drift1 {
-  from { transform: translate(0,0); }
-  to   { transform: translate(10%,8%); }
-}
+      40% {
+        text-shadow:
+          0 0 25px rgba(255, 180, 120, 0.9),
+          0 0 60px rgba(255, 100, 120, 0.6);
+      }
 
-@keyframes drift2 {
-  from { transform: translate(0,0); }
-  to   { transform: translate(-10%,-8%); }
-}
+      100% {
+        text-shadow:
+          0 0 15px rgba(255, 180, 120, 0.6),
+          0 0 40px rgba(255, 100, 120, 0.35);
+      }
+    }
 
-/* =========================
+    @keyframes letterGlow {
+      from {
+        text-shadow:
+          0 0 15px rgba(255, 180, 120, 0.6),
+          0 0 40px rgba(255, 100, 120, 0.35);
+      }
+
+      to {
+        text-shadow:
+          0 0 40px rgba(255, 180, 120, 1),
+          0 0 90px rgba(255, 100, 120, 0.7);
+      }
+    }
+
+    @keyframes headerFlicker {
+      0% {
+        opacity: 0;
+        filter: brightness(0.4);
+      }
+
+      20% {
+        opacity: 0.4;
+      }
+
+      30% {
+        opacity: 0.1;
+      }
+
+      45% {
+        opacity: 0.7;
+      }
+
+      60% {
+        opacity: 0.3;
+      }
+
+      75% {
+        opacity: 1;
+        filter: brightness(1);
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    /* CTA sequential wave fade-in */
+    @keyframes ctaWave {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes drift1 {
+      from {
+        transform: translate(0, 0);
+      }
+
+      to {
+        transform: translate(10%, 8%);
+      }
+    }
+
+    @keyframes drift2 {
+      from {
+        transform: translate(0, 0);
+      }
+
+      to {
+        transform: translate(-10%, -8%);
+      }
+    }
+
+    /* =========================
    ACCESSIBILITY
 ========================= */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-</style>
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="background-valve"></div>
-<div class="blob"></div>
-<div class="blob"></div>
+  <div class="background-valve"></div>
+  <div class="blob"></div>
+  <div class="blob"></div>
 
-<div class="container" id="container"></div>
+  <div class="container" id="container"></div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const container = document.getElementById('container');
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('container');
 
-  const headerText = "Tall Boy";
-  const ctaText = "Reach out via email"; 
-  const email = "loud@tallboyamps.co.uk";
-  const split = ["loud", "@", "tallboyamps.co.uk"];
+      const headerText = "Tall Boy";
+      const ctaText = "Reach out via email";
+      const email = "loud@tallboyamps.co.uk";
+      const split = ["loud", "@", "tallboyamps.co.uk"];
 
-  function renderHeader() {
-    const headerDiv = document.createElement('div');
-    headerDiv.className = 'header-line';
+      function renderHeader() {
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'header-line';
 
-    [...headerText].forEach((char, i) => {
-      const span = document.createElement('span');
-      span.className = 'letter header-letter';
-      span.textContent = char;
-      span.style.setProperty('--i', i);
-      headerDiv.appendChild(span);
-    });
+        [...headerText].forEach((char, i) => {
+          const span = document.createElement('span');
+          span.className = 'letter header-letter';
+          span.textContent = char;
+          span.style.setProperty('--i', i);
+          headerDiv.appendChild(span);
+        });
 
-    const ctaDiv = document.createElement('div');
-    ctaDiv.className = 'cta-line';
+        const ctaDiv = document.createElement('div');
+        ctaDiv.className = 'cta-line';
 
-    // Add envelope icon
-    ctaDiv.innerHTML = `<svg class="cta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        // Add envelope icon
+        ctaDiv.innerHTML = `<svg class="cta-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
       <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18a2 2 0 002 2h16a2 2 0 002-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
     </svg>`;
 
-    // Add letters with sequential animation
-    [...ctaText].forEach((char, i) => {
-      const span = document.createElement('span');
-      if (char === " ") {
-        span.textContent = "\u00A0";
-        span.style.width = "0.5ch";
-        span.style.display = "inline-block";
-      } else {
-        span.className = 'letter cta-letter';
-        span.textContent = char;
-        span.style.animationDelay = `${i * 0.08}s`; // sequential wave
+        // Add letters with sequential animation
+        [...ctaText].forEach((char, i) => {
+          const span = document.createElement('span');
+          if (char === " ") {
+            span.textContent = "\u00A0";
+            span.style.width = "0.5ch";
+            span.style.display = "inline-block";
+          } else {
+            span.className = 'letter cta-letter';
+            span.textContent = char;
+            span.style.animationDelay = `${i * 0.08}s`; // sequential wave
+          }
+          ctaDiv.appendChild(span);
+        });
+
+        container.appendChild(headerDiv);
+        container.appendChild(ctaDiv);
+
+        // Fade in CTA container after header flicker
+        setTimeout(() => {
+          ctaDiv.style.transition = "opacity 0.8s ease-out";
+          ctaDiv.style.opacity = 1;
+        }, 1600);
       }
-      ctaDiv.appendChild(span);
-    });
 
-    container.appendChild(headerDiv);
-    container.appendChild(ctaDiv);
+      function renderEmail() {
+        container.innerHTML = '';
+        renderHeader();
 
-    // Fade in CTA container after header flicker
-    setTimeout(() => {
-      ctaDiv.style.transition = "opacity 0.8s ease-out";
-      ctaDiv.style.opacity = 1;
-    }, 1600);
-  }
+        // First render email in single line
+        const lineDiv = document.createElement('div');
+        lineDiv.className = 'email-line';
 
-  function renderEmail() {
-    container.innerHTML = '';
-    renderHeader();
+        const link = document.createElement('a');
+        link.className = 'email-link';
+        link.href = `mailto:${email}`;
+        link.style.whiteSpace = 'nowrap';
 
-    // First render email in single line
-    const lineDiv = document.createElement('div');
-    lineDiv.className = 'email-line';
-
-    const link = document.createElement('a');
-    link.className = 'email-link';
-    link.href = `mailto:${email}`;
-    link.style.whiteSpace = 'nowrap';
-
-    [...email].forEach((char, i) => {
-      const span = document.createElement('span');
-      span.className = 'letter';
-      span.textContent = char;
-      span.style.setProperty('--i', i);
-      link.appendChild(span);
-    });
-
-    lineDiv.appendChild(link);
-    container.appendChild(lineDiv);
-
-    // If it overflows, replace with split parts
-    if (link.scrollWidth > container.clientWidth) {
-      const splitDiv = document.createElement('div');
-      splitDiv.className = 'email-line';
-      split.forEach(part => {
-        const partLink = document.createElement('a');
-        partLink.className = 'email-link';
-        partLink.href = `mailto:${email}`;
-        [...part].forEach((char, i) => {
+        [...email].forEach((char, i) => {
           const span = document.createElement('span');
           span.className = 'letter';
           span.textContent = char;
           span.style.setProperty('--i', i);
-          partLink.appendChild(span);
+          link.appendChild(span);
         });
-        splitDiv.appendChild(partLink);
-      });
 
-      container.removeChild(lineDiv);
-      container.appendChild(splitDiv);
-    }
-  }
+        lineDiv.appendChild(link);
+        container.appendChild(lineDiv);
 
-  renderEmail();
-  requestAnimationFrame(() => container.classList.add('ready'));
-  window.addEventListener('resize', renderEmail);
-});
-</script>
+        // If it overflows, replace with split parts
+        if (link.scrollWidth > container.clientWidth) {
+          const splitDiv = document.createElement('div');
+          splitDiv.className = 'email-line';
+          split.forEach(part => {
+            const partLink = document.createElement('a');
+            partLink.className = 'email-link';
+            partLink.href = `mailto:${email}`;
+            [...part].forEach((char, i) => {
+              const span = document.createElement('span');
+              span.className = 'letter';
+              span.textContent = char;
+              span.style.setProperty('--i', i);
+              partLink.appendChild(span);
+            });
+            splitDiv.appendChild(partLink);
+          });
+
+          container.removeChild(lineDiv);
+          container.appendChild(splitDiv);
+        }
+      }
+
+      renderEmail();
+      requestAnimationFrame(() => container.classList.add('ready'));
+      window.addEventListener('resize', renderEmail);
+    });
+  </script>
 
 </body>
+
 </html>
