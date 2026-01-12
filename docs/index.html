@@ -144,7 +144,7 @@ body {
 .email-link {
   text-decoration: none;
   display: inline-block;
-  white-space: nowrap;
+  white-space: nowrap; /* prevent wrapping by default */
 }
 
 /* =========================
@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('container');
 
   const headerText = "Tall Boy";
-  const ctaText = "Reach out"; 
+  const ctaText = "Reach out via email"; 
   const email = "loud@tallboyamps.co.uk";
   const split = ["loud", "@", "tallboyamps.co.uk"];
 
@@ -343,27 +343,47 @@ document.addEventListener('DOMContentLoaded', () => {
     container.innerHTML = '';
     renderHeader();
 
-    const lines = window.innerWidth <= 600 ? split : [email];
+    // First render email in single line
+    const lineDiv = document.createElement('div');
+    lineDiv.className = 'email-line';
 
-    lines.forEach(line => {
-      const lineDiv = document.createElement('div');
-      lineDiv.className = 'email-line';
+    const link = document.createElement('a');
+    link.className = 'email-link';
+    link.href = `mailto:${email}`;
+    link.style.whiteSpace = 'nowrap';
 
-      const link = document.createElement('a');
-      link.className = 'email-link';
-      link.href = `mailto:${email}`;
+    [...email].forEach((char, i) => {
+      const span = document.createElement('span');
+      span.className = 'letter';
+      span.textContent = char;
+      span.style.setProperty('--i', i);
+      link.appendChild(span);
+    });
 
-      [...line].forEach((char, i) => {
-        const span = document.createElement('span');
-        span.className = 'letter';
-        span.textContent = char;
-        span.style.setProperty('--i', i);
-        link.appendChild(span);
+    lineDiv.appendChild(link);
+    container.appendChild(lineDiv);
+
+    // If it overflows, replace with split parts
+    if (link.scrollWidth > container.clientWidth) {
+      const splitDiv = document.createElement('div');
+      splitDiv.className = 'email-line';
+      split.forEach(part => {
+        const partLink = document.createElement('a');
+        partLink.className = 'email-link';
+        partLink.href = `mailto:${email}`;
+        [...part].forEach((char, i) => {
+          const span = document.createElement('span');
+          span.className = 'letter';
+          span.textContent = char;
+          span.style.setProperty('--i', i);
+          partLink.appendChild(span);
+        });
+        splitDiv.appendChild(partLink);
       });
 
-      lineDiv.appendChild(link);
-      container.appendChild(lineDiv);
-    });
+      container.removeChild(lineDiv);
+      container.appendChild(splitDiv);
+    }
   }
 
   renderEmail();
