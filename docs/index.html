@@ -26,7 +26,6 @@ html, body {
   font-family: 'Saira Condensed', sans-serif;
 }
 
-/* Prevent mobile layout overflow caused by transforms */
 body {
   position: fixed;
   inset: 0;
@@ -47,7 +46,7 @@ body {
 }
 
 /* =========================
-   BLOBS (VISUAL ONLY)
+   BLOBS
 ========================= */
 .blob {
   position: fixed;
@@ -108,6 +107,13 @@ body {
 }
 
 /* =========================
+   HEADER
+========================= */
+.header-line {
+  margin-bottom: 0.6em;
+}
+
+/* =========================
    EMAIL
 ========================= */
 .email-line {
@@ -142,6 +148,11 @@ body {
   animation-delay:
     calc(var(--i) * 0.05s + 0.8s),
     calc(var(--i) * 0.05s + 1.2s);
+}
+
+/* Header letters slightly larger */
+.header-letter {
+  font-size: clamp(3rem, 8vw, 5.2rem);
 }
 
 /* =========================
@@ -228,9 +239,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('container');
   const email = "loud@tallboyamps.co.uk";
   const split = ["loud", "@", "tallboyamps.co.uk"];
+  const headerText = "Tall Boy";
+
+  function renderHeader() {
+    const headerDiv = document.createElement('div');
+    headerDiv.className = 'header-line';
+
+    [...headerText].forEach((char, i) => {
+      const span = document.createElement('span');
+      span.className = 'letter header-letter';
+      span.textContent = char;
+      span.style.setProperty('--i', i);
+      headerDiv.appendChild(span);
+    });
+
+    container.appendChild(headerDiv);
+  }
 
   function renderEmail() {
     container.innerHTML = '';
+    renderHeader();
+
     const lines = window.innerWidth <= 600 ? split : [email];
 
     lines.forEach(line => {
